@@ -1,26 +1,86 @@
+import 'dart:developer';
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flashchat/components/register_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
   SignUpPage({super.key});
-  String email = '';
-  String password = '';
+
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  String _fullName = '';
+  String _email = '';
+  String _password = '';
+  String? userPhoto;
+
+  final _picker = ImagePicker();
+
+  XFile? photo;
+  CollectionReference usersProfile =
+      FirebaseFirestore.instance.collection('userprofile');
+
+  void pickImageFromCamera() async {
+    try {
+      final pickedImage = await _picker.pickImage(
+        source: ImageSource.camera,
+      );
+      setState(() {
+        photo = pickedImage;
+      });
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  void pickImageFromGallery() async {
+    try {
+      final pickedImage = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: 300,
+        maxWidth: 300,
+        imageQuality: 95,
+      );
+      setState(() {
+        photo = pickedImage;
+      });
+    } catch (e) {
+      throw e;
+    }
+  }
+
   void signUp() async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
+        email: _email,
+        password: _password,
       );
+      firebase_storage.Reference reference = firebase_storage
+          .FirebaseStorage.instance
+          .ref('auth-profile/$_email.jpg');
+      final _uid = FirebaseAuth.instance.currentUser!.uid;
+      await reference.putFile(File(photo!.path));
+      await usersProfile.doc(_uid).set({
+        'fullName': _fullName,
+        'email': _email,
+        'userPhoto': userPhoto,
+        'uId': _uid,
+      });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        log('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        log('The account already exists for that email.');
       }
     } catch (e) {
-      print(e);
+      log('$e');
     }
   }
 
@@ -55,8 +115,11 @@ class SignUpPage extends StatelessWidget {
                   Row(
                     children: [
                       CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            'https://www.shutterstock.com/image-photo/young-handsome-man-beard-wearing-260nw-1768126784.jpg'),
+                        backgroundImage: photo == null
+                            ? null
+                            : FileImage(
+                                File(photo!.path),
+                              ),
                         radius: 60,
                       ),
                       SizedBox(
@@ -73,7 +136,9 @@ class SignUpPage extends StatelessWidget {
                               ),
                             ),
                             child: IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  pickImageFromCamera();
+                                },
                                 icon: Icon(
                                   Icons.camera_alt,
                                   size: 30,
@@ -91,7 +156,9 @@ class SignUpPage extends StatelessWidget {
                               ),
                             ),
                             child: IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  pickImageFromGallery();
+                                },
                                 icon: Icon(
                                   Icons.photo,
                                   size: 30,
@@ -105,8 +172,8 @@ class SignUpPage extends StatelessWidget {
                     height: 50,
                   ),
                   TextFormField(
-                    onChanged: (newValue) {
-                      // email = newValue;
+                    onChanged: (value) {
+                      _fullName = value;
                     },
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20),
@@ -130,8 +197,8 @@ class SignUpPage extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
-                    onChanged: (newValue) {
-                      email = newValue;
+                    onChanged: (value) {
+                      _email = value;
                     },
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20),
@@ -154,8 +221,8 @@ class SignUpPage extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
-                    onChanged: (newValue) {
-                      password = newValue;
+                    onChanged: (value) {
+                      _password = value;
                     },
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20),
@@ -203,11 +270,10 @@ class SignUpPage extends StatelessWidget {
                     height: 30,
                   ),
                   RegisterWidget(
-                      onTap: signUp,
-                      //  () {
-                      //   signUp();
-                      //   // context.go('/home_page');
-                      // },
+                      onTap: () {
+                        signUp();
+                        // context.go('/home_page');
+                      },
                       title: 'Sign Up'),
                 ],
               ),

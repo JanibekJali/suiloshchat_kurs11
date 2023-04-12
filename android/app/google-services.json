@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "701097295509",
-    "project_id": "suilosh-chat",
-    "storage_bucket": "suilosh-chat.appspot.com"
+    "project_number": "695310203462",
+    "project_id": "flash-chat-760ff",
+    "storage_bucket": "flash-chat-760ff.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:701097295509:android:7a12566fe214cc8ab3a59c",
+        "mobilesdk_app_id": "1:695310203462:android:66cce1d4c42d01862fa847",
         "android_client_info": {
-          "package_name": "com.suilosh_chat"
+          "package_name": "com.flash_chat"
         }
       },
       "oauth_client": [
         {
-          "client_id": "701097295509-bt63su9eorpj96lt9iochqff1a8ob27l.apps.googleusercontent.com",
+          "client_id": "695310203462-me469vf1982gq1n6bv5u99kb8rdmgl0h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.suilosh_chat",
+            "package_name": "com.flash_chat",
             "certificate_hash": "af5585721c70da83fc6e69de0b86041e5a063213"
           }
         },
         {
-          "client_id": "701097295509-2j5lirj5il7tkvsi7u2924pmh3e0ar2s.apps.googleusercontent.com",
+          "client_id": "695310203462-oo5u4269f9qltjh0q6iioe7b0vq0ri9k.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAUZelmhrVF0HCapEbFrB2knBJceGhXlBM"
+          "current_key": "AIzaSyDN2XWiMEhT5_vhl1Yhf9RJVkTcAP_YfJg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "701097295509-2j5lirj5il7tkvsi7u2924pmh3e0ar2s.apps.googleusercontent.com",
+              "client_id": "695310203462-oo5u4269f9qltjh0q6iioe7b0vq0ri9k.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

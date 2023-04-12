@@ -1,4 +1,4 @@
-package com.suilosh_chat
+package com.flash_chat
 
 import io.flutter.embedding.android.FlutterActivity
 

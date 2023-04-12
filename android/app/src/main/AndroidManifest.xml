@@ -1,11 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.suilosh_chat">
+    package="com.flash_chat">
+    
    <application
+        android:usesCleartextTraffic="true"
         android:label="flashchat"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
+            
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
